@@ -7,13 +7,13 @@
 #SBATCH --qos=qos-batch
 #SBATCH --mem=64GB
 
+# options
 LOG_SERVER=log_server
 LOG_SERVER_ADDR=127.0.0.1
 LOG_SERVER_PORT=5555
 LOG_DIRECTORY=output
-
 INTERVAL=30
-NUM_OF_LINES=100
+NUM_OF_LINES=1000
 EXIT_CONDITION=70
 
 generate_output_file()
