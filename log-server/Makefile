@@ -1,19 +1,16 @@
 CC=gcc
 RM=rm
 
-BIN=log_server
-SRCS=log_server.o
-OBJS=log_server.o
-
+SRCS := $(wildcard *.c)
+OBJS := $(SRCS:.c=.o)
 
 default: all
 
 all: $(OBJS)
-	$(CC) -o $(BIN) $^
 
-.c.o: $(SRCS)
+%.o: %.c
 	$(CC) -c $^
 
 clean:
-	$(RM) $(BIN) $(OBJS)
+	$(RM) $(OBJS)
 

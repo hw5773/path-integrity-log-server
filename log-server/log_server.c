@@ -8,15 +8,17 @@
 #include <signal.h>
 #include <getopt.h>
 
+#define MAX_FILE_NAME_LEN 256
 #define BUF_SIZE 16384
 #define TS_SIZE 256
 
 #define DEFAULT_PORT 5555
-#define DEFAULT_OUTPUT_FILENAME "output_stderr.out"
+#define DEFAULT_TARGET_FILENAME "Tutorial.spthy"
 #define DEFAULT_INTERVAL 5
 #define DEFAULT_NUM_OF_LINES 10
 #define DEFAULT_EXIT_INTERVAL 30
 #define DEFAULT_SHELL_SCRIPT "runTamarinShell.sh"
+#define DEFAULT_LOG_DIRECTORY "output"
 
 FILE *fp = NULL;
 int clnt_sock = 0;
@@ -31,8 +33,8 @@ int main(int argc, char *argv[])
   FILE *sfp;
   int recv, c, cnt, logging, port, interval, lines, incoming, exit;
   time_t curr, prev, t1, t2;
-  const char *pname, *output, *script;
-  char *ptr;
+  const char *pname, *script, *logdir;
+  char *tfname, *ptr1, *ptr2;
   struct tm *info;
 
 	struct sockaddr_in serv_addr, clnt_addr;
@@ -40,33 +42,36 @@ int main(int argc, char *argv[])
 
   char buf[BUF_SIZE] = {0, };
   char tmp[TS_SIZE] = {0, };
+  char output[MAX_FILE_NAME_LEN] = {0, };
 
   sfp = NULL;
   pname = argv[0];
   signal(SIGINT, sigint_handler);
 
   port = DEFAULT_PORT;
-  output = DEFAULT_OUTPUT_FILENAME;
+  tfname = DEFAULT_TARGET_FILENAME;
   interval = DEFAULT_INTERVAL;
   lines = DEFAULT_NUM_OF_LINES;
   exit = DEFAULT_EXIT_INTERVAL;
   script = DEFAULT_SHELL_SCRIPT;
+  logdir = DEFAULT_LOG_DIRECTORY;
 
   while (1)
   {
     int index = 0;
     static struct option long_options[] = {
       {"port", required_argument, 0, 'p'},
-      {"output", required_argument, 0, 'o'},
+      {"target", required_argument, 0, 't'},
       {"interval", required_argument, 0, 'i'},
       {"lines", required_argument, 0, 'l'},
       {"exit", required_argument, 0, 'e'},
       {"script", required_argument, 0, 's'},
+      {"log-directory", required_argument, 0, 'd'},
       {"help", required_argument, 0, 'h'},
       {0, 0, 0, 0}
     };
 
-    c = getopt_long(argc, argv, "p:o:i:l:e:s:h:0", long_options, &index);
+    c = getopt_long(argc, argv, "p:t:i:l:e:s:d:h:0", long_options, &index);
 
     if (c == -1)
       break;
@@ -76,8 +81,8 @@ int main(int argc, char *argv[])
       case 'p':
         port = atoi(optarg);
         break;
-      case 'o':
-        output = optarg;
+      case 't':
+        tfname = optarg;
         break;
       case 'i':
         interval = atoi(optarg);
@@ -90,6 +95,9 @@ int main(int argc, char *argv[])
         break;
       case 's':
         script = optarg;
+        break;
+      case 'd':
+        logdir = optarg;
         break;
       case 'h':
       default:
@@ -104,15 +112,27 @@ int main(int argc, char *argv[])
       usage(pname);
   }
 
-  fp = fopen(output, "w");
   curr = time(NULL);
   info = localtime(&curr);
-  strftime(tmp, TS_SIZE, "%x - %X", info);
+  strftime(tmp, TS_SIZE, "%d-%m-%y_%X", info);
+
+  printf("tfname: %s\n", tfname);
+  ptr1 = strrchr(tfname, '/');
+  ptr1++;
+  printf("file: %s\n", ptr1);
+  ptr2 = strtok(ptr1, ".");
+  printf("file name: %s\n", ptr2);
+
+  snprintf((char *)output, MAX_FILE_NAME_LEN, "%s/%s_stderr_%s.out", logdir, ptr2, tmp);
+  printf("final output: %s\n", output);
+  fp = fopen(output, "w");
 
   fprintf(fp, ">> Setting for the log server at %s\n", tmp);
   fprintf(stderr, ">> INFO: %s: Setting for the log server\n", tmp);
   fprintf(fp, "port: %d\n", port);
   fprintf(stderr, "port: %d\n", port);
+  fprintf(fp, "target file: %s\n", tfname);
+  fprintf(stderr, "target file: %s\n", tfname);
   fprintf(fp, "output file name: %s\n", output);
   fprintf(stderr, "output file name: %s\n", output);
   fprintf(fp, "interval (seconds): %d\n", interval);
@@ -121,8 +141,10 @@ int main(int argc, char *argv[])
   fprintf(stderr, "num of log lines: %d\n", lines);
   fprintf(fp, "waiting time (seconds): %d\n", exit);
   fprintf(stderr, "waiting time (seconds): %d\n", exit);
-  fprintf(fp, "script file: %s\n\n", script);
+  fprintf(fp, "script file: %s\n", script);
   fprintf(stderr, "script file: %s\n", script);
+  fprintf(fp, "log directory: %s\n\n", logdir);
+  fprintf(stderr, "log directory: %s\n", logdir);
 
   fprintf(fp, ">> Logging starts at %s (Configuration below)\n", tmp);
   fprintf(stderr, ">> INFO: %s: Configuration below\n", tmp);
@@ -174,13 +196,11 @@ int main(int argc, char *argv[])
       incoming = 1;
       curr = time(NULL);
       info = localtime(&curr);
-      strftime(tmp, TS_SIZE, "%x - %X", info);
+      strftime(tmp, TS_SIZE, "%d-%m-%y_%X", info);
 
       if (curr - prev > interval)
       {
         printf(">> INFO: %s: Logging enabled\n", tmp);
-        info = localtime(&curr);
-        strftime(tmp, TS_SIZE, "%x - %X", info);
         fprintf(fp, "\n>> Logging at %s\n", tmp);
         prev = curr;
         logging = 1;
@@ -215,7 +235,7 @@ int main(int argc, char *argv[])
       {
         curr = t2;
         info = localtime(&curr);
-        strftime(tmp, TS_SIZE, "%x - %X", info);
+        strftime(tmp, TS_SIZE, "%d-%m-%y_%X", info);
         printf(">> INFO: %s: No log messages for %d seconds\n", tmp, exit); 
         break;
       }
@@ -258,11 +278,12 @@ int usage(const char *pname)
   printf(">> Usage: %s [options]\n", pname);
   printf(">> Options\n");
   printf("  -p, --port\tPort number\n");
-  printf("  -o, --output\tOutput file name\n");
+  printf("  -t, --target\tTarget file name\n");
   printf("  -i, --interval\tInterval time between two logging periods\n");
   printf("  -l, --lines\tNumber of lines to be logged during the logging period\n");
   printf("  -e, --exit\tWaiting time (If there is no logs during this time, then the applications is exited\n");
   printf("  -s, --script\tPath of the running script file\n");
+  printf("  -d, --log-directory\tPath of the log directory\n");
   printf("  -h, --help Help message (This message)\n");
   printf(">> Example: ./log_server --port 5555 --output log.out --interval 30 --lines 100, --exit 300 --script runTamarinShell.sh\n");
   exit(1);
