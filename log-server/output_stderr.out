@@ -1,0 +1,35 @@
+>> Setting for the log server
+port: 5555
+output file name: output_stderr.out
+interval (seconds): 5
+num of log lines: 10
+waiting time (seconds): 30
+script file: ../runTamarinShell.sh
+
+>> Logging starts at 02/26/20 - 10:11:28 (Configuration below)
+#SBATCH --mail-type=end,fail
+#SBATCH --mail-user=zach.smith@uni.lu
+#SBATCH -n 40
+#SBATCH --time=0:59:0
+#SBATCH -p batch
+#SBATCH --qos=qos-batch
+#SBATCH --mem=64GB
+
+>> Logging at 02/26/20 - 10:11:31
+  solved goal nr. 0 (directly): SessKeyC( S, k.1 ) @ #i.2
+  solved goal nr. 0 (directly): SessKeyC( S, k.1 ) @ #i.2
+  solved goal nr. 0 (directly): SessKeyC( S, k.1 ) @ #i.2
+  solved goal nr. 0 (directly): SessKeyC( S, k.1 ) @ #i.2
+  solved goal nr. 1 (directly): K( k.1 ) @ #j.3
+  solved goal nr. 0 (directly): !Ltk( t.1, t.2 ) ▶₀ #i
+  solved goal nr. 0 (directly): !Pk( t.1, t.2 ) ▶₀ #i
+  solved goal nr. 0 (directly): !KU( adec(t.1, t.2) ) @ #i
+  solved goal nr. 0 (directly): !KU( aenc(t.1, t.2) ) @ #i
+  solved goal nr. 0 (directly): Client_1( t.1, t.2 ) ▶₀ #i
+  solved goal nr. 0 (directly): !KU( ~t.1 ) @ #i
+  solved goal nr. 4 (directly): !Pk( A.7, t.5 ) ▶₀ #vr.6
+  solved goal nr. 4 (directly): !Pk( A.10, t.8 ) ▶₀ #vr.9
+  solved goal nr. 2 (directly): !Pk( $S.4, pkS.4 ) ▶₁ #vr.3
+  solved goal nr. 4 (directly): !Pk( A.10, t.8 ) ▶₀ #vr.9
+  solved goal nr. 4 (directly): !Ltk( A.10, t.8 ) ▶₀ #vr.9
+  solved goal nr. 4 (directly): !Ltk( A.7, t.5 ) ▶₀ #vr.6
