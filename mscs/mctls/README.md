@@ -17,7 +17,10 @@ The mcTLS record protocol with a read-only middlebox
 ----------------------------------------------------
 <img src="mctls_record_reader.jpg"></img>
 
-![](https://latex.codecogs.com/svg.latex?y%3Dx%5E2)
+The following MAC keys are established at the mcTLS handshake protocol.
+Note that a read MAC key is also used as an encryption key.
+
+<img src="https://latex.codecogs.com/gif.latex?k_r" title="k_r" />
 
 The mcTLS record protocol with a read/write middlebox
 -----------------------------------------------------
