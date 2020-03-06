@@ -31,7 +31,7 @@ The TOR record protocol
 -----------------------
 <img src="tor_record.jpg"></img>
 
-When an endpoint sends want to send a payload <img
+When an endpoint wants to send a payload <img
 src="https://latex.codecogs.com/gif.latex?p"/>,
 he/she sends <img src="https://latex.codecogs.com/gif.latex?p" /> with
 a connID.

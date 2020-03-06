@@ -29,7 +29,7 @@ a write MAC key<br>
 &nbsp;&nbsp;<img src="https://latex.codecogs.com/gif.latex?k_e"/>:
 an endpoint MAC key<br>
 
-When an endpoint sends want to send a payload <img
+When an endpoint wants to send a payload <img
 src="https://latex.codecogs.com/gif.latex?p"/>,
 he/she generates three MACs (a read MAC, a write MAC, and an endpoint MAC) and
 send them with <img src="https://latex.codecogs.com/gif.latex?p" /> as <img
@@ -57,7 +57,7 @@ a write MAC key<br>
 &nbsp;&nbsp;<img src="https://latex.codecogs.com/gif.latex?k_e"/>:
 an endpoint MAC key<br>
 
-When an endpoint sends want to send a payload <img
+When an endpoint wants to send a payload <img
 src="https://latex.codecogs.com/gif.latex?p"/>,
 he/she generates three MACs (a read MAC, a write MAC, and an endpoint MAC) and
 send them with <img src="https://latex.codecogs.com/gif.latex?p" /> as <img
