@@ -17,8 +17,7 @@ The mcTLS record protocol with a read-only middlebox
 ----------------------------------------------------
 <img src="mctls_record_reader.jpg"></img>
 
-<img src="https://latex.codecogs.com/gif.latex?O_t=\text { Onset event at time
-bin } t " /> 
+![](https://latex.codecogs.com/svg.latex?y%3Dx%5E2)
 
 The mcTLS record protocol with a read/write middlebox
 -----------------------------------------------------
