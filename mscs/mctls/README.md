@@ -1,4 +1,5 @@
 Multi-context TLS Protocol
 ==========================
 
-![Alt text](mctls_record_reader.pdf "mcTLS Record Protocol with a Read-only Middlebox")
+<img src="mctls_record_reader.jpg"></img>
+<img src="mctls_record_writer.jpg"></img>
